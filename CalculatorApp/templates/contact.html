@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Contact Me
+{% endblock title %}
+
+{% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+           <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+            <strong></strong> {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+<div class="container mt-5 col-6">
+        <h1>Please Fill this form to Contact Us</h1>
+        <form action="/contact" method="POST">
+          
+            <div class="mb-3">
+                <label for="name" class="form-label">Your Full Name</label>
+                <input type="text" class="form-control" id="name" placeholder="enter your full name" name="name" required>
+            </div>  
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Mobile Number</label>
+                <input type="number" class="form-control" id="pno" placeholder="your phone number" name="pnumber" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Message</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Your Valuable feedback here..." name="feedback"></textarea>
+                </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+{% endblock body %}

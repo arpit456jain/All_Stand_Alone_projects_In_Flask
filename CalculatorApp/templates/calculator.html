@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+    {% block title %}
+    Calculator
+    {% endblock title %}
+   
+   {% block body %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+  <strong></strong> {{message}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+
+<div class="container mt-5 col-6">
+  <h1>Enter the equation to solve</h1>
+
+  <form action="calculate" method="POST">
+    <!-- <h6>Note:If there is a variable in the equation then enter the in the form of variable x</h6> -->
+    <div class="mb-3">
+      <textarea class="form-control" id="equation" rows="2" name="equation" placeholder="Enter the equation"></textarea>
+    </div>
+    <!-- <div class="mb-3">
+    <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter the value of variable(x) if present otherwise left it empty" name="var">
+  </div> -->
+
+    <button type="submit" class="btn btn-primary">Calculate</button>
+    <a class="btn btn-primary" onclick="reset()">Reset</a>
+
+  </form>
+</div>
+<div class="container col-lg-7 col-11 mx-auto  mt-5">
+  <h3 class="text-center">Instuctions and Information About operators</h3>
+  <table class="table table-warning table-striped" style="font-size:1.3rem">
+    <thead>
+      <tr>
+        <th scope="col">Operator</th>
+        <th scope="col" class="text-center">Name</th>
+        <th scope="col">Information</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-center">+</td>
+        <td class="text-center"> Addition</td>
+        <td>For adding two numbers <br> eg : 2+3 = 5</td>
+      </tr>
+      <tr>
+        <td class="text-center">-</td>
+        <td class="text-center">Substraction</td>
+        <td>For substracting second number from the first one <br> eg : 5-3 = 2</td>
+      </tr>
+      <tr>
+        <td class="text-center">*</td>
+        <td class="text-center">Multiplication</td>
+        <td>For Multipling two numbers <br> eg : 5*2 = 10</td>
+      </tr>
+      <tr>
+        <td class="text-center">/</td>
+        <td class="text-center">Division</td>
+        <td>For Diving Two Numbers and It will give Quotient in float format</td>
+      </tr>
+      <tr>
+        <td class="text-center">//</td>
+        <td class="text-center">Floor Division</td>
+        <td>For Diving Two Numbers and It will give Quotient in int format</td>
+      </tr>
+      <tr>
+        <td class="text-center">**</td>
+        <td class="text-center"> Exponentiation</td>
+        <td>For raising a number B to power A like A^B <br> eg : 5**2 = 25 (square of 5 is 25)</td>
+      </tr>
+      <tr>
+        <td class="text-center">%</td>
+        <td class="text-center">Modulus</td>
+        <td>It will give the remainder <br>eg : 5%2 = 1 </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  var reset_div = document.getElementById('successfull_reset');
+  console.log('calc js file')
+  var textField = document.getElementById("equation");
+  function reset() {
+    console.log('reset called')
+    textField.value = "";
+    reset_div.innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Great</strong> Reset successfull
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+        `
+  }
+</script>
+{% endblock body %}
