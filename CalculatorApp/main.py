@@ -1,12 +1,30 @@
-from flask import Flask,render_template,request,flash,session,redirect
+from flask import Flask,flash,render_template,request,flash,session,redirect
+from flask_sqlalchemy import SQLAlchemy
 import smtplib #for email
+from datetime import datetime
+import json
+import smtplib
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://root:@localhost/codesmashersblog"
 app.secret_key = "super-secret-key"
+db = SQLAlchemy(app)
+class Contacts(db.Model):
+    sno = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    phone_num = db.Column(db.String(12), nullable=False)
+    mes = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(12), nullable=True)
+    email = db.Column(db.String(20), nullable=False)
+
+
+
 @app.route('/')
-def hello_world():
-    # return 'Hello, World!
-    return redirect("/projects/calc")
+def index():
+    flash('Welcome Hop you like this calculator app', 'success')
+    return render_template('calculator.html')
 
 @app.route('/about')
 def about():
@@ -28,21 +46,19 @@ def contact():
         name = request.form.get('name')
         email = request.form.get('email')
         number = request.form.get('pnumber')
-        flash("We have recieved your Message thank you for Contacting us!!",'success')
-        print(name,email,feedback,number)
         
-        con = connectTOMail()
+        print(name,email,feedback,number)
+        entry = Contacts(name=name, phone_num = number, mes = feedback,email = email )
+        db.session.add(entry)
+        db.session.commit()
+        flash("We have recieved your Message thank you for Contacting us!!",'success')
+        # con = connectTOMail()
         # con.sendmail("arpit456jain@gmail.com",email,"Subject:Feed Back of Calculator app \n\n"+"Thank You for the feed back")
-        con.sendmail("arpit456jain@gmail.com","111arpit1@gmail.com","Subject:Calculator \n\n" + str(feedback))
+        # con.sendmail("arpit456jain@gmail.com","111arpit1@gmail.com","Subject:Calculator \n\n" + str(feedback))
         return redirect('/')
     return render_template('contact.html')
 
-@app.route('/projects/calc')
-def projects():
-    flash('Welcome Hop you like this calculator app', 'success')
-    return render_template('calculator.html')
-
-@app.route('/projects/calculate',methods=["GET","POST"])
+@app.route('/calculate',methods=["GET","POST"])
 def calculate():
     
     if request.method == 'POST':
